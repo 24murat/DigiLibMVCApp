@@ -1,10 +1,10 @@
 package com.fatykhov.digilib.controllers;
 
+import com.fatykhov.digilib.dao.BookDAO;
 import com.fatykhov.digilib.dao.PersonDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.fatykhov.digilib.models.Person;
 
@@ -12,10 +12,12 @@ import com.fatykhov.digilib.models.Person;
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
     }
 
     @GetMapping()
@@ -27,6 +29,7 @@ public class PeopleController {
     @GetMapping("/{personId}")
     public String show(@PathVariable("personId") int personId, Model model) {
         model.addAttribute("person", personDAO.show(personId));
+        model.addAttribute("personBooks", bookDAO.showBookList(personId));
         return "people/show";
     }
 
