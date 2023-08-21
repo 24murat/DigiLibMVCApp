@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update</title>
+</head>
+<body>
+<!--
+    • Мы не можем использовать method="PATCH" в обычном HTML. Используя th:method от Thymeleaf, он возьмёт это значение,
+автоматически создаст скрытое поле и поместит в него значение PATCH.
+После чего Spring с помощью фильтра сможет его прочитать.
+    • Данные с этой формы будут посылаться на адрес /people/id, id получаем из модели (id=${person.getId()}).
+    • th:object="${person}" – этот аттрибут возьмёт объект person, возьмёт значение поля name, которое есть
+у этого объекта, и вставит его в поле. Таким образом, когда мы зайдём на эту страницу редактирования человека
+в поле name будет не пусто, а значение name для текущего человека.
+-->
+<form th:method="PATCH" th:action="@{/people/{personId}(personId=${person.getPersonId()})}" th:object="${person}">
+  <label for="personName">Введите ФИО: </label>
+  <input type="text" th:field="*{personName}" id="personName">
+  <br/>
+  <label for="personYearOfBirth">Введите год рождения: </label>
+  <input type="text" th:field="*{personYearOfBirth}" id="personYearOfBirth">
+  <br/>
+  <input type="submit" value="Редактировать!">
+</form>
+
+</body>
+</html>
