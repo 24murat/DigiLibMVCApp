@@ -1,7 +1,9 @@
 package com.fatykhov.digilib.controllers;
 
 import com.fatykhov.digilib.dao.BookDAO;
+import com.fatykhov.digilib.dao.PersonDAO;
 import com.fatykhov.digilib.models.Book;
+import com.fatykhov.digilib.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/books")
 public class BooksController {
     private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
-    public BooksController(BookDAO bookDAO) {
+    public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
 
     @GetMapping()
@@ -24,8 +28,14 @@ public class BooksController {
     }
 
     @GetMapping("/{bookId}")
-    public String show(@PathVariable("bookId") int bookId, Model model) {
+    public String show(@PathVariable("bookId") int bookId, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookDAO.show(bookId));
+        Integer personWhoTookBookId = bookDAO.show(bookId).getPersonId();
+        if (personWhoTookBookId == null)
+            model.addAttribute("personWhoTookBook", null);
+        else
+            model.addAttribute("personWhoTookBook", personDAO.show(bookDAO.show(bookId).getPersonId()));
+        model.addAttribute("people", personDAO.index());
         return "books/show";
     }
 
@@ -56,5 +66,17 @@ public class BooksController {
     public String delete(@PathVariable("bookId") int bookId) {
         bookDAO.delete(bookId);
         return "redirect:/books";
+    }
+
+    @PatchMapping("/{bookId}/free")
+    public String freeBook(@PathVariable("bookId") int bookId) {
+        bookDAO.freeBook(bookId);
+        return "redirect:/books/" + bookId;
+    }
+
+    @PatchMapping("/{bookId}/assign")
+    public String assignBook(@ModelAttribute("person") Person person, @PathVariable("bookId") int bookId) {
+        bookDAO.assignBook(person, bookId);
+        return "redirect:/books/" + bookId;
     }
 }

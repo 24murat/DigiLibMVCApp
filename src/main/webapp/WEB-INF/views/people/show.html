@@ -7,17 +7,17 @@
 <body>
 
   <p th:text="${person.getPersonName() + ', ' + person.getPersonYearOfBirth()}">name</p>
-  <th:block th:if="${not #lists.isEmpty(personBooks)}">
+<!--  Если книги есть -->
+  <div th:if="${not #lists.isEmpty(personBooks)}">
     <span style="font-weight: bold;">Книги:</span>
     <div th:each="book : ${personBooks}">
       <span th:text="${book.getBookTitle() + ', ' + book.getBookAuthor() + ', ' + book.getBookPublicationYear()}"></span>
     </div>
-  </th:block>
-
+  </div>
   <!-- Если нет книг -->
-  <th:block th:if="${#lists.isEmpty(personBooks)}">
+  <div th:if="${#lists.isEmpty(personBooks)}">
     <p>Человек пока не взял ни одной книги</p>
-  </th:block>
+  </div>
 
   <hr/>
 

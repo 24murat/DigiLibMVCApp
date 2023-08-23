@@ -2,6 +2,7 @@ package com.fatykhov.digilib.models;
 
 public class Book {
     private int bookId;
+    private Integer personId;
     private String bookTitle;
     private String bookAuthor;
     private int bookPublicationYear;
@@ -11,6 +12,7 @@ public class Book {
 
     public Book(int bookId, String bookTitle, String bookAuthor, int bookPublicationYear) {
         this.bookId = bookId;
+        this.personId = null;
         this.bookTitle = bookTitle;
         this.bookAuthor = bookAuthor;
         this.bookPublicationYear = bookPublicationYear;
@@ -22,6 +24,14 @@ public class Book {
 
     public void setBookId(int bookId) {
         this.bookId = bookId;
+    }
+
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
     public String getBookTitle() {
