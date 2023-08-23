@@ -5,46 +5,14 @@
   <title>Страница добавления человека</title>
 </head>
 <body>
-<!--
-            Создаём форму для создания нового человека
-        Для этого используем тег <form> и будем указывать в нём Thymeleaf аттрибуты:
-    1. th:method="POST" – с каким методом будет отправляться HTTP форма
-    2. th:action="@{/people}" – на какой URL (адрес) эта форма будет обращаться
-(куда форма будет передавать свои данные).
-Все адреса в Thymeleaf пишутся таким синтаксисом: @{/АДРЕС}
-    3. th:object="${person}" – ему передаём тот самый объект класса Person с ключом person, который мы положили
-в Модель (в методе newPerson Контроллера PeopleController). Мы обращаемся к этому объекту и для него будет
-создаваться форма.
--->
 <form th:method="POST" th:action="@{/people}" th:object="${person}">
-  <!--
-              Форма создана, теперь в этой форме указываем то поле, которое будет назначаться
-          для нашего объекта person.
-              Будем назначать только одно поле – name. Для этого используем тег <input>:
-          1. type="text" – тип поля текстовый – в это поле будем вводить текстовое значение
-          2. th:field="*{name}" – название поля, которое есть у объекта класса Person, которому
-      мы назначаем значение в этом поле HTML формы
-          3. id="name" – этот id нам понадобится, чтобы сделать label для этого input'а
-
-              Сделаем label для этого input'а – то есть название этого поля, чтобы пользователь знал,
-          какое значение нужно вводить в это поле. Для этого используем тег <label> с аттрибутами:
-          1. for="name" – указываем для какого input'а этот label предназначается. Так как в input
-      был указан id="name", то и в for для label мы указываем for="name". Так Thymeleaf (и браузер?)
-      поймёт, что этот label предназначается для этого поля th:field="*{name}",
-      а это поле в свою очередь назначает значение для поля *{name} в классе Person
-          В самом теге указываем текст, который будет отображаться в этом label
-
-              <br/> – оставляем пустую строку
-
-              <input type="submit" value="Create!"> – кнопка при нажатии на которую, данные с этой
-          формы отправим POST запросом на адрес /people
-
-  -->
   <label for="personName">Введите ФИО: </label>
   <input type="text" th:field="*{personName}" id="personName">
+  <div style="color:red" th:if="${#fields.hasErrors('personName')}" th:errors="*{personName}">Name error</div>
   <br/>
   <label for="personYearOfBirth">Введите год рождения: </label>
   <input type="text" th:field="*{personYearOfBirth}" id="personYearOfBirth">
+  <div style="color:red" th:if="${#fields.hasErrors('personYearOfBirth')}" th:errors="*{personYearOfBirth}">Year of birth error</div>
   <br/>
   <input type="submit" value="Создать!">
 </form>

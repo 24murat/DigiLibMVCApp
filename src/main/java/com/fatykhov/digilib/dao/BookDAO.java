@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BookDAO {
@@ -22,7 +23,7 @@ public class BookDAO {
         return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
     }
 
-    public Book show(int bookId)  {
+    public Book show(int bookId) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE bookId=?", new Object[]{bookId},
                 new BeanPropertyRowMapper<>(Book.class)).stream().findAny().orElse(null);
     }
@@ -45,11 +46,6 @@ public class BookDAO {
         return jdbcTemplate.query("SELECT * FROM Book WHERE personId=?", new Object[]{personId},
                 new BeanPropertyRowMapper<>(Book.class));
     }
-
-//    public Book showPersonWhoTookBook(int bookId) {
-//        return jdbcTemplate.query("SELECT * FROM Book WHERE bookId=?", new Object[]{bookId},
-//                new BeanPropertyRowMapper<>(Book.class)).stream().findAny().orElse(null);
-//    }
 
     public void freeBook(int bookToFreeId) {
         jdbcTemplate.update("UPDATE Book SET personId=null WHERE bookId=?", bookToFreeId);

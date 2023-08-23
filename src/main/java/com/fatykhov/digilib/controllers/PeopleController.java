@@ -2,11 +2,15 @@ package com.fatykhov.digilib.controllers;
 
 import com.fatykhov.digilib.dao.BookDAO;
 import com.fatykhov.digilib.dao.PersonDAO;
+import com.fatykhov.digilib.utils.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.fatykhov.digilib.models.Person;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
@@ -14,10 +18,13 @@ public class PeopleController {
     private final PersonDAO personDAO;
     private final BookDAO bookDAO;
 
+    private final PersonValidator personValidator;
+
     @Autowired
-    public PeopleController(PersonDAO personDAO, BookDAO bookDAO) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
         this.bookDAO = bookDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -39,7 +46,11 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") Person person) {
+    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+        if (bindingResult.hasErrors())
+            return "people/new";
+
         personDAO.save(person);
         return "redirect:/people";
     }
@@ -51,7 +62,11 @@ public class PeopleController {
     }
 
     @PatchMapping("/{personId}")
-    public String update(@ModelAttribute("person") Person person, @PathVariable("personId") int personId) {
+    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult, @PathVariable("personId") int personId) {
+        personValidator.validate(person, bindingResult);
+        if (bindingResult.hasErrors())
+            return "people/edit";
+
         personDAO.update(personId, person);
         return "redirect:/people";
     }
