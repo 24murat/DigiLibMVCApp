@@ -6,6 +6,7 @@ import com.fatykhov.digilib.repositories.BooksRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +26,24 @@ public class BooksService {
         this.peopleService = peopleService;
     }
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
+    public List<Book> findAll(String sortByYear) {
+        if (Boolean.parseBoolean(sortByYear))
+            return booksRepository.findAll(Sort.by("bookPublicationYear"));
+        else if (sortByYear == null)
+            return booksRepository.findAll();
+        else
+            return booksRepository.findAll();
     }
 
-    public List<Book> findAll(int pageNum, int itemsPerPage) {
-        return booksRepository.findAll(PageRequest.of(pageNum, itemsPerPage)).getContent();
+    public List<Book> findAll(int pageNum, int itemsPerPage, String sortByYear) {
+        if (Boolean.parseBoolean(sortByYear))
+            return booksRepository.findAll
+                    (PageRequest.of(pageNum, itemsPerPage, Sort.by("bookPublicationYear")))
+                    .getContent();
+        else if (sortByYear == null)
+            return booksRepository.findAll(PageRequest.of(pageNum, itemsPerPage)).getContent();
+        else
+            return booksRepository.findAll(PageRequest.of(pageNum, itemsPerPage)).getContent();
     }
 
     public Book findOne(int bookId) {

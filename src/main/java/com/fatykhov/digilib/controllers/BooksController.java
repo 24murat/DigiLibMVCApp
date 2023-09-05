@@ -30,10 +30,14 @@ public class BooksController {
 //        this.bookValidator = bookValidator;
     }
 
-
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer pageNum,
+                        @RequestParam(value = "books_per_page", required = false) Integer books_per_page,
+                        @RequestParam(value = "sort_by_year", required = false) String sort_by_year) {
+        if (pageNum == null || books_per_page == null)
+            model.addAttribute("books", booksService.findAll(sort_by_year));
+        else
+            model.addAttribute("books", booksService.findAll(pageNum, books_per_page, sort_by_year));
         return "books/index";
     }
 
