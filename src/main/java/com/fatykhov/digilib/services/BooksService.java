@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,21 +53,6 @@ public class BooksService {
         return foundBook.orElse(null);
     }
 
-    public List<Book> showBookList(int personId) {
-        return booksRepository.findBooksByOwner(peopleService.findOne(personId));
-    }
-
-//    public Person findOwner(int bookId) {
-//        Optional<Book> foundBook = booksRepository.findById(bookId);
-//
-//        if (foundBook.isPresent()) {
-//            Person owner = foundBook.get().getOwner();
-//            if (owner != null) {
-//                return owner;
-//            } else return null;
-//        } else return null;
-//    }
-
     public List<Book> searchByTitle(String query) {
         return booksRepository.findBooksByBookTitleStartingWith(query);
     }
@@ -96,6 +82,7 @@ public class BooksService {
             owner.getBooks().remove(foundBook);
 
             foundBook.get().setOwner(null);
+            foundBook.get().setAssignedAt(null);
         }
     }
 
@@ -106,6 +93,7 @@ public class BooksService {
         if (foundBook.isPresent()) {
             Book book = foundBook.get();
             book.setOwner(person);
+            book.setAssignedAt(new Date());
         }
     }
 }

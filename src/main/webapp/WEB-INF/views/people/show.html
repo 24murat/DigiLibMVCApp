@@ -11,7 +11,8 @@
   <div th:if="${not #lists.isEmpty(personBooks)}">
     <span style="font-weight: bold;">Книги:</span>
     <div th:each="book : ${personBooks}">
-      <span th:text="${book.getBookTitle() + ', ' + book.getBookAuthor() + ', ' + book.getBookPublicationYear()}"></span>
+      <span th:text="${book.getBookTitle() + ', ' + book.getBookAuthor() + ', ' + book.getBookPublicationYear()}"
+            th:style="${book.isExpired()} ? 'color: red' : 'color: black'">book</span>
     </div>
   </div>
   <!-- Если нет книг -->

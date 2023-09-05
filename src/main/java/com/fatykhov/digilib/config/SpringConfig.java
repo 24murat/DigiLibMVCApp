@@ -74,18 +74,6 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.viewResolver(resolver);
     }
 
-//              Old
-//    @Bean
-//    public DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
-//        dataSource.setUrl(environment.getProperty("url"));
-//        dataSource.setUsername(environment.getProperty("username"));
-//        dataSource.setPassword(environment.getProperty("password"));
-//
-//        return dataSource;
-//    }
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -97,12 +85,6 @@ public class SpringConfig implements WebMvcConfigurer {
 
         return dataSource;
     }
-
-//              Old
-//    @Bean
-//    public JdbcTemplate jdbcTemplate() {
-//        return new JdbcTemplate(dataSource());
-//    }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();

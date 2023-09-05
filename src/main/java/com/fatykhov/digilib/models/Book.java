@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -12,8 +13,6 @@ public class Book {
     @Column(name = "bookId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId;
-
-//    private Integer personId;
 
     @NotEmpty(message = "Name should not be empty")
     @Column(name = "bookTitle")
@@ -32,12 +31,18 @@ public class Book {
     @JoinColumn(name = "personId", referencedColumnName = "personId")
     private Person owner;
 
+    @Column(name = "assigned_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date assignedAt;
+
+    @Transient
+    private boolean isExpired;
+
     public Book() {
     }
 
     public Book(int bookId, String bookTitle, String bookAuthor, int bookPublicationYear) {
         this.bookId = bookId;
-//        this.personId = null;
         this.bookTitle = bookTitle;
         this.bookAuthor = bookAuthor;
         this.bookPublicationYear = bookPublicationYear;
@@ -51,13 +56,6 @@ public class Book {
         this.bookId = bookId;
     }
 
-//    public Integer getPersonId() {
-//        return personId;
-//    }
-//
-//    public void setPersonId(Integer personId) {
-//        this.personId = personId;
-//    }
 
     public String getBookTitle() {
         return bookTitle;
@@ -89,6 +87,22 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public Date getAssignedAt() {
+        return assignedAt;
+    }
+
+    public void setAssignedAt(Date assignedAt) {
+        this.assignedAt = assignedAt;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 
     @Override

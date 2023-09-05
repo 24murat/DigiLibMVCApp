@@ -45,7 +45,6 @@ public class BooksController {
     @GetMapping("/{bookId}")
     public String show(@PathVariable("bookId") int bookId, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findOne(bookId));
-//        model.addAttribute("personWhoTookBook", booksService.findOwner(bookId));
         model.addAttribute("people", peopleService.findAll());
         return "books/show";
     }
@@ -57,7 +56,6 @@ public class BooksController {
 
     @PostMapping()
     public String create(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
-//        bookValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/new";
 

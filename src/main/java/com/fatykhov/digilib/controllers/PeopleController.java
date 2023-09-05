@@ -36,7 +36,7 @@ public class PeopleController {
     @GetMapping("/{personId}")
     public String show(@PathVariable("personId") int personId, Model model) {
         model.addAttribute("person", peopleService.findOne(personId));
-        model.addAttribute("personBooks", bookService.showBookList(personId));
+        model.addAttribute("personBooks", peopleService.showBookList(personId));
         return "people/show";
     }
 
