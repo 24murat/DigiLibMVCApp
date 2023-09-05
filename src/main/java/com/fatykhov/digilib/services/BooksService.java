@@ -56,15 +56,19 @@ public class BooksService {
         return booksRepository.findBooksByOwner(peopleService.findOne(personId));
     }
 
-    public Person findOwner(int bookId) {
-        Optional<Book> foundBook = booksRepository.findById(bookId);
+//    public Person findOwner(int bookId) {
+//        Optional<Book> foundBook = booksRepository.findById(bookId);
+//
+//        if (foundBook.isPresent()) {
+//            Person owner = foundBook.get().getOwner();
+//            if (owner != null) {
+//                return owner;
+//            } else return null;
+//        } else return null;
+//    }
 
-        if (foundBook.isPresent()) {
-            Person owner = foundBook.get().getOwner();
-            if (owner != null) {
-                return owner;
-            } else return null;
-        } else return null;
+    public List<Book> searchByTitle(String query) {
+        return booksRepository.findBooksByBookTitleStartingWith(query);
     }
 
     @Transactional

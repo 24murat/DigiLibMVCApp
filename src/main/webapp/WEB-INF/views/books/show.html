@@ -9,7 +9,8 @@
 
 <!--  Если книга не свободна -->
 <div th:if="${book.getOwner()!=null}">
-  <span th:text="${'Книга сейчас у: ' + personWhoTookBook.getPersonName()}"></span>
+<!--  <span th:text="${'Книга сейчас у: ' + personWhoTookBook.getPersonName()}"></span>-->
+  <span th:text="${'Книга сейчас у: ' + book.getOwner().getPersonName()}"></span>
   <form th:method="PATCH" th:action="@{/books/{bookId}/free(bookId=${book.getBookId()})}">
     <input type="submit" value="Освободить книгу"/>
   </form>

@@ -7,6 +7,7 @@ import com.fatykhov.digilib.models.Person;
 import com.fatykhov.digilib.services.BooksService;
 import com.fatykhov.digilib.services.PeopleService;
 //import com.fatykhov.digilib.utils.BookValidator;
+//import jdk.tools.jlink.internal.JmodArchive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +45,7 @@ public class BooksController {
     @GetMapping("/{bookId}")
     public String show(@PathVariable("bookId") int bookId, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findOne(bookId));
-        model.addAttribute("personWhoTookBook", booksService.findOwner(bookId));
+//        model.addAttribute("personWhoTookBook", booksService.findOwner(bookId));
         model.addAttribute("people", peopleService.findAll());
         return "books/show";
     }
@@ -64,6 +65,17 @@ public class BooksController {
         return "redirect:/books";
     }
 
+    @GetMapping("/search")
+    public String searchBook() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String foundBook(Model model, @RequestParam("query") String query) {
+        model.addAttribute("books", booksService.searchByTitle(query));
+        return "books/search";
+    }
+
     @GetMapping("/{bookId}/edit")
     public String edit(Model model, @PathVariable("bookId") int bookId) {
         model.addAttribute("book", booksService.findOne(bookId));
@@ -71,7 +83,8 @@ public class BooksController {
     }
 
     @PatchMapping("/{bookId}")
-    public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult, @PathVariable("bookId") int bookId) {
+    public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult,
+                         @PathVariable("bookId") int bookId) {
 //        bookValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/edit";

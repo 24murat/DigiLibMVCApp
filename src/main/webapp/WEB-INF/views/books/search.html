@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница поиска</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/books/search}">
+    <label for="query">Введите поисковой запрос: </label>
+    <input type="text" id="query" name="query"/>
+    <br/>
+    <input type="submit" value="Искать! 🔎">
+</form>
+
+<!--  Если книга не найдена -->
+<div th:if="${books.size() == 0}">
+    <span>Книг не найдено</span>
+</div>
+<!-- Если книги найдены -->
+<div th:if="${books.size() > 0}">
+    <div th:each="book : ${books}">
+
+        <a th:href="@{/books/{bookId}(bookId=${book.getBookId()})}"
+           th:text="${'📖' + book.getBookTitle() + ', ' + book.getBookAuthor() + ', ' + book.getBookPublicationYear()}">book</a>
+        <br/>
+        <!-- Если книга занята -->
+        <div th:if="${book.getOwner()!=null}">
+            <span th:text="${'Книга сейчас у: ' + book.getOwner().getPersonName()}"></span>
+        </div>
+        <!-- Если свободна -->
+        <div th:if="${book.getOwner()==null}">
+            <span>Эта книга свободна</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
